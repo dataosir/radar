@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "initialized": false,
+    "profile_summary": "Java 后端 / GraalVM / 远程优先，不接受纯外包刷量"
+  },
+  "telegram": {
+    "api_id": 0,
+    "api_hash": "REPLACE_ME",
+    "session_name": "tg_radar"
+  },
+  "channels": [
+    {
+      "username": "@example_jobs_channel",
+      "enabled": false,
+      "note": "替换为你订阅的招聘频道"
+    }
+  ],
+  "ingest": {
+    "bootstrap_limit": 50,
+    "request_delay_seconds": 1.0
+  },
+  "filter": {
+    "include_keywords": [
+      "Java",
+      "Spring",
+      "后端",
+      "Backend",
+      "GraalVM",
+      "Native Image",
+      "远程",
+      "Remote",
+      "JVM",
+      "架构师"
+    ],
+    "exclude_keywords": [
+      "日结",
+      "刷单",
+      "代理招聘",
+      "纯实习",
+      "无经验可"
+    ],
+    "include_patterns": []
+  },
+  "report": {
+    "summary_max_chars": 300,
+    "timezone": "Asia/Shanghai"
+  },
+  "log": {
+    "level": "INFO",
+    "redact_bodies": false
+  }
+}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# 运行时生成（含 Telegram 会话、个人信息）
+/data/
+/reports/
+/logs/
+tg_radar_config.json
+*.session
+*.session-journal
+
+# 密钥与本地配置
+.env
+secrets/
+
+# 编辑器 / OS
+.DS_Store
+.aider*
+.qoder/

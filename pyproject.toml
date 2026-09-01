@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tg-radar"
+version = "0.1.0"
+description = "TG-RADAR — Telegram 招聘信息个人雷达"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+authors = [{ name = "renwentao" }]
+keywords = ["telegram", "jobs", "digest", "recruitment", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: Chinese (Simplified)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "telethon>=1.36",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.4"]
+
+[project.scripts]
+tg_radar = "tg_radar.runtime.cli:main"
+
+[tool.setuptools]
+packages = [
+    "tg_radar",
+    "tg_radar.core",
+    "tg_radar.config",
+    "tg_radar.ingest",
+    "tg_radar.filter",
+    "tg_radar.reporting",
+    "tg_radar.runtime",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
