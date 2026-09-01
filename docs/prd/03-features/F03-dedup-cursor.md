@@ -13,7 +13,7 @@ dedup_key = f"{channel_id}:{message_id}"
 ## 游标语义
 
 - `cursors[channel_id].last_message_id` = 已成功拉取并落 raw 的最大 ID  
-- **只增不减**（除非手动 `tg_radar cursor reset @channel` 运维命令）
+- **只增不减**（除非手动 `chat_radar cursor reset @channel` 运维命令）
 
 ## raw 层去重
 

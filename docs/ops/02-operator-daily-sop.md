@@ -6,7 +6,7 @@
 
 ## 晨间 Checklist（08:30）
 
-- [ ] 运行 `tg_radar digest`（或确认 launchd 已跑）
+- [ ] 运行 `chat_radar digest`（或确认 launchd 已跑）
 - [ ] 打开 `reports/` 最新 `DIGEST_*.md`
 - [ ] 逐条点开链接：值得跟进 → 记到求职 tracker；误报 → 记下关键词
 - [ ] 看 `status`：命中数是否异常（0 或暴增）
@@ -22,7 +22,7 @@
 1. 在 TG 原频道找到漏掉的帖  
 2. 检查是否缺正向词 → 补 `filter.include_keywords`  
 3. 检查频道是否在 `channels[]` 且 `enabled: true`  
-4. 必要时 `tg_radar cursor reset @channel` 重拉（慎用）
+4. 必要时 `chat_radar cursor reset @channel` 重拉（慎用）
 
 ## 每周复盘（周日 10 min）
 

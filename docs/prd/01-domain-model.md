@@ -68,7 +68,7 @@ new → dismissed（误报，写入 exclude 学习 — Phase 2）
 
 ## 与 tea 的类比
 
-| tea | tg-radar |
+| tea | chat-radar |
 |---|---|
 | 种子 `seed_records` | `jobs.jsonl` |
 | `trade_plan.json` | `cursors.json` |

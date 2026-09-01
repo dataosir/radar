@@ -7,14 +7,14 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from tg_radar.core.paths import config_path
+from chat_radar.core.paths import config_path
 
 DEFAULTS: dict[str, Any] = {
     "meta.initialized": False,
     "meta.profile_summary": "",
     "telegram.api_id": 0,
     "telegram.api_hash": "",
-    "telegram.session_name": "tg_radar",
+    "telegram.session_name": "chat_radar",
     "ingest.bootstrap_limit": 50,
     "ingest.request_delay_seconds": 1.0,
     "filter.include_keywords": [],
@@ -24,6 +24,10 @@ DEFAULTS: dict[str, Any] = {
     "report.timezone": "Asia/Shanghai",
     "log.level": "INFO",
     "log.redact_bodies": False,
+    "wechat.enabled": False,
+    "wechat.inbox_dir": "data/wechat_inbox",
+    "wechat.default_chat": "inbox",
+    "wechat.export_dir": "data/wechat_exports",
 }
 
 

@@ -6,6 +6,18 @@
 
 ## 1. 技术选型决策
 
+### 1.0 多源 IM 架构（2026-09-01 扩展）
+
+| 源 | 适配器 | 状态 |
+|---|---|---|
+| Telegram | `ingest/telethon`（P0-04） | 📋 待实现 |
+| **微信** | `ingest/wechat_export` + `wechat_inbox` | ✅ MVP |
+| Slack / 企微 | 未来 | 🔮 |
+
+共享层：`core/models.RawMessage` → `filter` → `reporting`。
+
+详见 [`04-wechat-integration.md`](04-wechat-integration.md)。
+
 ### 1.1 为什么 Python
 
 | 考量 | 结论 |
@@ -63,15 +75,16 @@ core / config (L0) → paths, atomic_io, logging, defaults
 ## 3. 核心数据流
 
 ```
-tg_radar_config.json
+chat_radar_config.json
     ↓
-auth → session file
-    ↓
-fetch: Telethon → raw_messages.jsonl + cursors.json
+┌─ telegram: auth → fetch ──────────────┐
+└─ wechat:   parse/inbox ───────────────┤
+                                        ▼
+                         raw_messages.jsonl + cursors.json
     ↓
 filter: rules → jobs.jsonl
     ↓
-report: DIGEST_*.md
+report: DIGEST_*.md（含 `DIGEST_wechat_*` 分源输出，MP-11 后合并）
 ```
 
 `digest` = `fetch` + `filter` + `report` 串联。
@@ -82,12 +95,12 @@ report: DIGEST_*.md
 
 | 包 | PRD |
 |---|---|
-| `tg_radar/ingest/` | F01, F03 |
-| `tg_radar/filter/` | F02 |
-| `tg_radar/reporting/` | F04 |
-| `tg_radar/runtime/` | CLI 全命令 |
-| `tg_radar/config/` | 配置 |
-| `tg_radar/selftest.py` | NFR |
+| `chat_radar/ingest/` | F01, F03, **F06** |
+| `chat_radar/filter/` | F02 |
+| `chat_radar/reporting/` | F04 |
+| `chat_radar/runtime/` | CLI 全命令 |
+| `chat_radar/config/` | 配置 |
+| `chat_radar/selftest.py` | NFR |
 
 ---
 
@@ -95,13 +108,13 @@ report: DIGEST_*.md
 
 | 优先级 | 基准目录 |
 |---|---|
-| 1 | `$TG_RADAR_HOME` |
+| 1 | `$CHAT_RADAR_HOME` |
 | 2 | 源码仓库根（CWD） |
 
 其下：`data/`、`reports/`、`logs/`。  
-配置：`$TG_RADAR_CONFIG` 或 `tg_radar_config.json`。
+配置：`$CHAT_RADAR_CONFIG` 或 `chat_radar_config.json`。
 
-Session：`$TG_RADAR_HOME/tg_radar.session`（可配置 `telegram.session_name`）。
+Session：`$CHAT_RADAR_HOME/chat_radar.session`（可配置 `telegram.session_name`）。
 
 ---
 
@@ -116,4 +129,4 @@ Idea 8 digest pipeline:
   Digest 输出
 ```
 
-tg-radar 实现 **Telegram 输入适配器** 的招聘垂直版；未来若做 Idea 8 产品，抽取 `filter` + `reporting` 为共享库。
+chat-radar 实现 **多源输入适配器**；Telegram + 微信已落地，其余见 `prd/06-multi-platform-roadmap.md`。

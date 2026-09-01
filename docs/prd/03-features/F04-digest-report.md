@@ -11,7 +11,7 @@
 ## 报告结构
 
 ```markdown
-# TG-RADAR Digest · 2026-09-01 08:30
+# CHAT-RADAR Digest · 2026-09-01 08:30
 
 ## 概览
 - 扫描频道：3

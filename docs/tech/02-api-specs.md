@@ -3,9 +3,9 @@
 ## CLI 入口
 
 ```
-python -m tg_radar [command] [options]
+python -m chat_radar [command] [options]
 # 或安装后：
-tg_radar [command]
+chat_radar [command]
 ```
 
 ## 命令一览
@@ -19,7 +19,9 @@ tg_radar [command]
 | `channels` | `list` | 频道与游标 | 📋 |
 | `status` | — | 今日统计 | 📋 |
 | `config` | `list/get/set` | 配置 | ✅ 骨架 |
-| `selftest` | — | 离线自测 | ✅ 骨架 |
+| `wechat parse` | `<file> [--chat]` | 解析微信导出 TXT | ✅ |
+| `wechat inbox` | — | 扫描 inbox 文件夹 | ✅ |
+| `wechat digest` | `--since hours` | 微信消息过滤 + 报告 | ✅ |
 
 ## 模块契约
 
@@ -52,6 +54,16 @@ def write_digest(jobs: list[JobPost], meta: DigestMeta, out_dir: Path) -> Path:
 ```python
 def run_digest(cfg) -> int:  # exit code
 def run_selftest() -> int:
+```
+
+### 微信模块（F06）
+
+```python
+def parse_export_file(path: Path, *, chat_title: str | None, timezone_name: str) -> list[RawMessage]: ...
+def scan_inbox_dir(inbox_dir: Path, *, default_chat: str, timezone_name: str) -> list[RawMessage]: ...
+def run_wechat_parse(cfg, file_path: str, *, chat_title: str | None) -> int: ...
+def run_wechat_inbox(cfg) -> int: ...
+def run_wechat_digest(cfg, *, since_hours: int | None) -> int: ...
 ```
 
 ## 退出码

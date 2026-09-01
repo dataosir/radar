@@ -57,7 +57,7 @@
 
 ---
 
-## `tg_radar_config.json`（见根目录 example）
+## `chat_radar_config.json`（见根目录 example）
 
 主要段：
 
@@ -81,7 +81,7 @@
 
 ---
 
-## 日志 `logs/tg_radar.log`
+## 日志 `logs/chat_radar.log`
 
 文本行；建议格式：
 

@@ -24,15 +24,15 @@
 
 - 依赖最小化：MVP 仅 `telethon`；LLM 可选  
 - Python 3.10+；与 tea 工程习惯对齐  
-- 配置单文件 `tg_radar_config.json`
+- 配置单文件 `chat_radar_config.json`
 
 ## 可移植性
 
-- 开发机 macOS；数据目录可用 `TG_RADAR_HOME` 覆盖
+- 开发机 macOS；数据目录可用 `CHAT_RADAR_HOME` 覆盖
 
 ## 质量门禁
 
 ```bash
-python -m tg_radar selftest   # 必须全绿
+python -m chat_radar selftest   # 必须全绿
 ruff check .                  # 无告警（引入后）
 ```

@@ -37,6 +37,7 @@
 2. **凭证不入库**：`api_id` / `api_hash` / `session` 文件必须在 `.gitignore` 中，**禁止提交**。
 3. **只读拉取**：默认只读取用户已订阅的公开/私有频道消息，**不**自动发帖、不群发、不爬取未订阅内容。
 4. **ToS 边界**：使用 Telegram User API（Telethon）须遵守 [Telegram ToS](https://telegram.org/tos)；若未来产品化，须改 Bot API 或官方 Business 路径。
+5. **微信合规**：仅处理用户**主动导出或粘贴**的聊天内容；**禁止** Hook 个人微信号、自动登录、存储微信密码（见 `tech/04-wechat-integration.md`）。
 
 ---
 

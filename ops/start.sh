@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# TG-RADAR 一键启动：环境初始化 + 运行 CLI 子命令
+# CHAT-RADAR 一键启动：环境初始化 + 运行 CLI 子命令
 #
 # 用法:
 #   ./ops/start.sh              # 初始化环境并跑 selftest
@@ -14,8 +14,8 @@ cd "$ROOT"
 
 VENV="$ROOT/.venv"
 PYTHON="${PYTHON:-python3}"
-CONFIG="$ROOT/tg_radar_config.json"
-CONFIG_EXAMPLE="$ROOT/tg_radar_config.example.json"
+CONFIG="$ROOT/chat_radar_config.json"
+CONFIG_EXAMPLE="$ROOT/chat_radar_config.example.json"
 
 die() {
   echo "错误: $*" >&2
@@ -60,7 +60,7 @@ ensure_dirs() {
 run_cli() {
   local cmd="${1:-selftest}"
   shift || true
-  python -m tg_radar "$cmd" "$@"
+  python -m chat_radar "$cmd" "$@"
 }
 
 main() {
@@ -74,7 +74,7 @@ main() {
     run_cli selftest
     echo ""
     echo "环境就绪。下一步:"
-    echo "  1. 编辑 tg_radar_config.json（api_id / api_hash / channels）"
+    echo "  1. 编辑 chat_radar_config.json（api_id / api_hash / channels）"
     echo "  2. ./ops/start.sh auth    # 首次 Telegram 登录"
     echo "  3. ./ops/start.sh digest  # 生成每日 digest"
     return 0

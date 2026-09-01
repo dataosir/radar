@@ -22,7 +22,7 @@ def atomic_write_json(path: Path, obj: Any, *, indent: int = 2) -> None:
 
 def setup_logging(log_file: Path, level: str = "INFO") -> logging.Logger:
     log_file.parent.mkdir(parents=True, exist_ok=True)
-    logger = logging.getLogger("tg_radar")
+    logger = logging.getLogger("chat_radar")
     logger.handlers.clear()
     logger.setLevel(getattr(logging, level.upper(), logging.INFO))
     fmt = logging.Formatter("%(asctime)s %(levelname)s %(message)s")

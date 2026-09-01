@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def base_dir() -> Path:
-    env = os.environ.get("TG_RADAR_HOME")
+    env = os.environ.get("CHAT_RADAR_HOME") or os.environ.get("TG_RADAR_HOME")
     if env:
         return Path(env).expanduser().resolve()
     return Path.cwd().resolve()
@@ -32,7 +32,13 @@ def logs_dir() -> Path:
 
 
 def config_path() -> Path:
-    env = os.environ.get("TG_RADAR_CONFIG")
+    env = os.environ.get("CHAT_RADAR_CONFIG") or os.environ.get("TG_RADAR_CONFIG")
     if env:
         return Path(env).expanduser().resolve()
-    return base_dir() / "tg_radar_config.json"
+    legacy = base_dir() / "tg_radar_config.json"
+    current = base_dir() / "chat_radar_config.json"
+    if current.exists():
+        return current
+    if legacy.exists():
+        return legacy
+    return current

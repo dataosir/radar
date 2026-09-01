@@ -4,10 +4,10 @@
 
 | 时刻 | 动作 | 命令 | 说明 |
 |---|---|---|---|
-| 08:30 | 晨间 digest | `tg_radar digest` | launchd 或手动；拉取 + 过滤 + 出报告 |
-| 12:30 | 午间补扫（可选） | `tg_radar digest` | 招聘频道白天更新多时可开 |
+| 08:30 | 晨间 digest | `chat_radar digest` | launchd 或手动；拉取 + 过滤 + 出报告 |
+| 12:30 | 午间补扫（可选） | `chat_radar digest` | 招聘频道白天更新多时可开 |
 | 20:00 | 回顾 | 打开 `reports/` 最新 MD | 标记 `starred`（Phase 2 CLI） |
-| 每周日 | 频道质量复盘 | `tg_radar stats` | 哪个频道命中率高 / 噪音大 |
+| 每周日 | 频道质量复盘 | `chat_radar stats` | 哪个频道命中率高 / 噪音大 |
 
 ## 命令映射（规划）
 
@@ -25,7 +25,7 @@
 
 ```bash
 # 早上一条命令
-tg_radar digest
+chat_radar digest
 
 # 输出示例
 # → 拉取 3 个频道，新增 47 条，命中 5 条

@@ -19,9 +19,9 @@
 ## 提交前自查
 
 ```bash
-python -m tg_radar selftest
+python -m chat_radar selftest
 ruff check .                # 配置 ruff 后
-python -m compileall -q tg_radar
+python -m compileall -q chat_radar
 ```
 
 ## 代码风格

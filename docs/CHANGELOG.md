@@ -1,6 +1,6 @@
 # Changelog
 
-本文件记录 TG-RADAR 已发生变更。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
+本文件记录 CHAT-RADAR 已发生变更。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
 ---
 
@@ -8,22 +8,24 @@
 
 ### Added
 
-- `ops/start.sh`：一键启动脚本（venv 初始化、依赖安装、配置模板、selftest、CLI 转发）
+- **F06 微信接入 MVP**：`wechat parse` / `wechat inbox` / `wechat digest` CLI
+- `core/models.RawMessage` 多源统一模型
+- `ingest/wechat_export.py`、`wechat_inbox.py`、`persist.py`
+- `docs/prd/06-multi-platform-roadmap.md`：主流 IM 接入与聊天摘要路线图
+- selftest 扩展至 7 项（含微信解析与去重）
+
+### Changed
+
+- **品牌升级**：TG-RADAR → **CHAT-RADAR**；Python 包 `chat_radar`；配置 `chat_radar_config.json`
+- 产品定位扩展：多源聊天历史雷达（招聘为首个垂直 profile）
+- 多源架构：Telegram + 微信共享 filter / reporting 层
+- digest 渲染支持 `source` / `sender` 字段
+- 环境变量向后兼容：`TG_RADAR_HOME` / `TG_RADAR_CONFIG`
 
 ---
 
-## [0.1.0] - 2026-09-01
+## [0.1.0] - 2026-09-01（早期）
 
 ### Added
 
-- 项目立项：文档体系（prd / tech / ops）、`RULES.md`、`.cursorrules`（对齐 tea 约束）
-- 技术选型：Python 3.10+、Telethon、JSONL 持久化、规则过滤 MVP
-- PRD F01–F05 框架、领域模型、日循环 workflow
-- Python 包骨架：`tg_radar`（core / config / runtime）
-- 配置模板 `tg_radar_config.example.json`
-- CLI 入口：`python -m tg_radar --help`、`selftest`
-
-### Notes
-
-- 关联 indie-build-log Idea 8-D2（Telegram 招聘 digest 自用变体）
-- Telethon ingest 尚未实现，见 `prd/05-roadmap-backlog.md` P0-04
+- `ops/start.sh`：一键启动脚本（venv 初始化、依赖安装、配置模板、selftest、CLI 转发）

@@ -1,4 +1,4 @@
-# TG-RADAR 文档总索引（权威清单）
+# CHAT-RADAR 文档总索引（权威清单）
 
 > **增删改 `docs/` 内任意 `.md` 时，必须同步更新本文件。**  
 > 入口与 4 步闭环见 [`README.md`](README.md)；实现铁律见 [`../RULES.md`](../RULES.md)。
@@ -31,8 +31,10 @@
 | [`prd/03-features/F03-dedup-cursor.md`](prd/03-features/F03-dedup-cursor.md) | 去重与游标 | F03 |
 | [`prd/03-features/F04-digest-report.md`](prd/03-features/F04-digest-report.md) | Markdown digest 输出 | F04 |
 | [`prd/03-features/F05-alert-notify.md`](prd/03-features/F05-alert-notify.md) | 即时提醒（可选） | F05 |
+| [`prd/03-features/F06-wechat-ingest.md`](prd/03-features/F06-wechat-ingest.md) | 微信导出 / inbox 接入 | F06 |
 | [`prd/04-nfr-constraints.md`](prd/04-nfr-constraints.md) | 非功能硬约束 | NFR |
 | [`prd/05-roadmap-backlog.md`](prd/05-roadmap-backlog.md) | 现行迭代 backlog | backlog |
+| [`prd/06-multi-platform-roadmap.md`](prd/06-multi-platform-roadmap.md) | 多平台接入与聊天摘要路线图 | MP |
 
 ---
 
@@ -46,6 +48,8 @@
 | [`tech/01-architecture.md`](tech/01-architecture.md) | 分层 / 数据流 / 技术选型 | tech/01 |
 | [`tech/02-api-specs.md`](tech/02-api-specs.md) | CLI / 模块调用契约 | tech/02 |
 | [`tech/03-db-schema.md`](tech/03-db-schema.md) | JSON/JSONL 持久化 | tech/03 |
+| [`tech/04-wechat-integration.md`](tech/04-wechat-integration.md) | 微信接入技术方案 | tech/04 |
+| [`tech/04-wechat-integration.md`](tech/04-wechat-integration.md) | 微信多源接入方案 | tech/04 |
 
 ---
 
@@ -56,6 +60,7 @@
 | [`ops/README.md`](ops/README.md) | 运营层导读 |
 | [`ops/01-credentials-sop.md`](ops/01-credentials-sop.md) | Telegram API 凭证与 session 管理 |
 | [`ops/02-operator-daily-sop.md`](ops/02-operator-daily-sop.md) | 每日扫帖 SOP |
+| [`ops/03-wechat-sop.md`](ops/03-wechat-sop.md) | 微信 ingest 日循环 SOP |
 
 仓库根 [`../ops/`](../ops/) 放 launchd / cron 可执行脚本（后续）。
 

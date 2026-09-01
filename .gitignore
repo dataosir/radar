@@ -12,6 +12,7 @@ build/
 /data/
 /reports/
 /logs/
+chat_radar_config.json
 tg_radar_config.json
 *.session
 *.session-journal

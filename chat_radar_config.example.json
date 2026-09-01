@@ -6,7 +6,7 @@
   "telegram": {
     "api_id": 0,
     "api_hash": "REPLACE_ME",
-    "session_name": "tg_radar"
+    "session_name": "chat_radar"
   },
   "channels": [
     {
@@ -44,6 +44,13 @@
   "report": {
     "summary_max_chars": 300,
     "timezone": "Asia/Shanghai"
+  },
+  "wechat": {
+    "enabled": true,
+    "inbox_dir": "data/wechat_inbox",
+    "export_dir": "data/wechat_exports",
+    "default_chat": "招聘群",
+    "note": "MVP：PC 导出 TXT 解析 + inbox 手动落盘；不 Hook 个人号"
   },
   "log": {
     "level": "INFO",

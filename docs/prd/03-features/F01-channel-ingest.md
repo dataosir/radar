@@ -6,7 +6,7 @@
 
 ## 输入
 
-- `tg_radar_config.json` → `channels[]`（`@username` 或 numeric id）
+- `chat_radar_config.json` → `channels[]`（`@username` 或 numeric id）
 - `data/cursors.json` → 每频道 `last_message_id`
 - Telethon session 文件（`auth` 后生成）
 
@@ -30,6 +30,6 @@
 
 ## 验收
 
-- [ ] `tg_radar auth` 成功登录  
-- [ ] `tg_radar fetch` 对 1 个测试频道写入 raw + 更新游标  
+- [ ] `chat_radar auth` 成功登录  
+- [ ] `chat_radar fetch` 对 1 个测试频道写入 raw + 更新游标  
 - [ ] 重复 `fetch` 无新增时不写重复行
