@@ -8,6 +8,10 @@
 
 ### Added
 
+- **自动 commit 消息生成**：`.cursor/hooks/generate_commit_message.py` 按 staged diff 生成中文主题 + 功能号 + 变更范围（参考 enterprise-kb-py 提交风格）；`auto_commit.sh` 改用 `-F` 写入完整 message
+
+### Added (prior)
+
 - **交互节点结构化日志**：`logs/interactions.jsonl` 记录 command/digest/wechat 步骤；`logs/start_menu.log` 记录菜单与 CLI 调用
 - **P1-05 channels 管理**：`channels add/remove/enable/disable`；`start.sh` 菜单 13 交互管理
 - **P1-07 自用验证模板**：`docs/ops/04-self-use-validation.md`（14 天噪音/漏帖记录表）

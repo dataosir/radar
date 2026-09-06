@@ -23,10 +23,20 @@
 - **变更透明**：重构或大面积改动须先输出 Implementation Plan，确认后再执行。
 
 ## 3. Git 工作流（自动 commit）
-- **自动 commit**：Agent 会话结束时，`.cursor/hooks/auto_commit.sh` 会自动 `git add` + `git commit`（消息前缀 `auto:`）。
+- **自动 commit**：Agent 会话结束时，`.cursor/hooks/auto_commit.sh` 会自动 `git add` + `git commit`。
+- **提交信息规范**（参考 enterprise-kb-py）：中文主题句 + 功能号（Fxx / P1-xx / MP-xx）；由 `generate_commit_message.py` 根据 staged diff 生成，格式示例：
+  ```
+  auto: [F06/P1-08] 增强微信链路健壮性，接入交互节点结构化日志。
+
+  3 files changed, 120 insertions(+), 5 deletions(-)
+
+  变更范围:
+  - 代码: core/interaction_log.py, runtime/wechat_runner.py
+  - 文档索引: CHANGELOG.md, project-state.md
+  ```
 - **不自动 push**：仅用户明确要求时才 `git push`。
 - **Agent 不手动 commit**：完成代码/文档改动即可；无需再单独执行 commit（除非用户明确要求 amend 或特殊 message）。
-- **日志**：自动 commit 记录写入 `logs/auto_commit.log`。
+- **日志**：自动 commit 记录写入 `logs/auto_commit.log`（含 subject 首行）。
 
 ## 4. 结构化输出要求
 1. **上下文分析**：说明涉及的文件与文档背景。
