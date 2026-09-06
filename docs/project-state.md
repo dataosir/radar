@@ -63,6 +63,7 @@
 | **P1-06** | **launchd 晨间调度** | 模板 + install 脚本 ✅ |
 | **P1-07** | **14 天自用验证模板** | `ops/04-self-use-validation.md` ✅ |
 | **P1-08** | **交互节点日志** | `interactions.jsonl` + `start_menu.log` ✅ |
+| **P1-18** | **pre-commit 产物拦截** | `ops/git-hooks/pre-commit` ✅ |
 
 ## 明确不做（现在）
 

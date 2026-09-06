@@ -24,7 +24,7 @@
 
 ## 3. Git 工作流（自动 commit）
 - **自动 commit**：Agent 会话结束时，`.cursor/hooks/auto_commit.sh` 会自动 `git add` + `git commit`。
-- **提交信息规范**（参考 enterprise-kb-py）：中文主题句 + 功能号（Fxx / P1-xx / MP-xx）；由 `generate_commit_message.py` 根据 staged diff 生成，格式示例：
+- **提交信息规范**（参考 enterprise-kb-py）：中文主题句 + 功能号（Fxx / P1-xx / MP-xx）；由 `generate_commit_message.py` 根据 staged diff 生成；**变更范围分组规则**见 `.cursor/hooks/commit_scope.json`（可编辑 JSON，无需改 Python），格式示例：
   ```
   auto: [F06/P1-08] 增强微信链路健壮性，接入交互节点结构化日志。
 

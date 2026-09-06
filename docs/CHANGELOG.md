@@ -8,6 +8,8 @@
 
 ### Added
 
+- **commit 变更范围配置化**：`.cursor/hooks/commit_scope.json` 声明式分组规则（patterns / priority / item 模板）；未匹配文件按路径前缀自动分组；排序由 priority + staged 出现顺序决定，不再硬编码 `order` 列表
+- **pre-commit 运行时产物拦截**：`ops/git-hooks/pre-commit` 拒绝 staged `reports/`、`data/`、`logs/` 等敏感路径；`ops/install_git_hooks.sh`；`install.sh` 自动安装
 - **自动 commit 消息生成**：`.cursor/hooks/generate_commit_message.py` 按 staged diff 生成中文主题 + 功能号 + 变更范围（参考 enterprise-kb-py 提交风格）；`auto_commit.sh` 改用 `-F` 写入完整 message
 
 ### Added (prior)

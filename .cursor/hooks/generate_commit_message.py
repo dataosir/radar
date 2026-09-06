@@ -2,6 +2,8 @@
 """Generate structured auto-commit messages from staged git changes.
 
 Style reference: enterprise-kb-py — Chinese subject, feature IDs, concrete scope.
+Scope grouping rules live in commit_scope.json (editable without touching Python).
+
 Output format:
   auto: [Fxx/Px-yy] 主题句。
 
@@ -12,16 +14,19 @@ Output format:
 """
 from __future__ import annotations
 
+import fnmatch
+import json
 import re
 import subprocess
 import sys
-from collections import defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
 ROOT = Path(subprocess.check_output(
     ["git", "rev-parse", "--show-toplevel"], text=True
 ).strip())
+SCOPE_CONFIG = Path(__file__).with_name("commit_scope.json")
 
 
 def _run(*args: str) -> str:
@@ -69,37 +74,89 @@ def detect_feature_ids(files: list[str]) -> list[str]:
     return ordered[:4]
 
 
-def categorize(files: list[str]) -> dict[str, list[str]]:
-    buckets: dict[str, list[str]] = defaultdict(list)
-    for path in files:
-        p = Path(path)
-        name = p.name
-        if path.startswith("chat_radar/"):
-            part = path.split("/")[1] if "/" in path else "core"
-            buckets["代码"].append(f"{part}/{name}" if part != name else name)
-        elif path.startswith("docs/prd/"):
-            buckets["PRD"].append(name)
-        elif path.startswith("docs/tech/"):
-            buckets["Tech"].append(name)
-        elif path.startswith("docs/ops/"):
-            buckets["Ops"].append(name)
-        elif path in ("docs/CHANGELOG.md", "docs/project-state.md", "docs/INDEX.md", "docs/README.md"):
-            buckets["文档索引"].append(name)
-        elif path.startswith("docs/"):
-            buckets["文档"].append(name)
-        elif path.startswith("tests/") or "selftest" in path:
-            buckets["测试"].append(name)
-        elif path.startswith(".cursor/"):
-            buckets["开发工具"].append(name)
-        elif path.startswith("ops/"):
-            buckets["运维脚本"].append(name)
-        elif name in ("start.sh", "install.sh", "build.sh", "RULES.md", ".cursorrules"):
-            buckets["入口/规约"].append(name)
+@dataclass
+class ScopeGroup:
+    label: str
+    priority: int
+    first_index: int
+    items: list[str] = field(default_factory=list)
+    total_count: int = 0
+
+    @property
+    def sort_key(self) -> tuple[int, int, str]:
+        return (self.priority, self.first_index, self.label)
+
+
+def _load_scope_config() -> dict:
+    if not SCOPE_CONFIG.is_file():
+        return {"groups": [], "fallback": {"label": "其他", "priority": 999, "depth": 2}, "max_items_per_group": 8}
+    with SCOPE_CONFIG.open(encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _match_pattern(path: str, pattern: str) -> bool:
+    if pattern.endswith("/**"):
+        prefix = pattern[:-3]
+        return path == prefix or path.startswith(prefix + "/")
+    return fnmatch.fnmatch(path, pattern)
+
+
+def _format_item(path: str, template: str | None) -> str:
+    p = Path(path)
+    if not template:
+        return p.name
+    module = p.parts[1] if len(p.parts) > 2 and p.parts[0] == "chat_radar" else p.name
+    return template.format(
+        path=path,
+        basename=p.name,
+        module=module,
+        subdir=module,
+    )
+
+
+def _fallback_label(path: str, fallback: dict) -> str:
+    strategy = fallback.get("strategy", "path_prefix")
+    if strategy == "path_prefix":
+        depth = int(fallback.get("depth", 2))
+        parts = Path(path).parts[:depth]
+        return "/".join(parts) if parts else path
+    return fallback.get("label", "其他")
+
+
+def categorize(files: list[str]) -> list[ScopeGroup]:
+    cfg = _load_scope_config()
+    rules = cfg.get("groups", [])
+    fallback = cfg.get("fallback", {})
+    max_items = int(cfg.get("max_items_per_group", 8))
+
+    buckets: dict[str, ScopeGroup] = {}
+
+    for index, path in enumerate(files):
+        matched_rule = None
+        for rule in rules:
+            patterns = rule.get("patterns", [])
+            if any(_match_pattern(path, pattern) for pattern in patterns):
+                matched_rule = rule
+                break
+
+        if matched_rule:
+            label = matched_rule["label"]
+            priority = int(matched_rule.get("priority", 500))
+            item = _format_item(path, matched_rule.get("item"))
         else:
-            buckets["其他"].append(path)
-    for key in buckets:
-        buckets[key] = sorted(set(buckets[key]))[:8]
-    return dict(buckets)
+            label = _fallback_label(path, fallback)
+            priority = int(fallback.get("priority", 999))
+            item = path
+
+        group = buckets.get(label)
+        if group is None:
+            group = ScopeGroup(label=label, priority=priority, first_index=index)
+            buckets[label] = group
+        group.total_count += 1
+        if len(group.items) < max_items and item not in group.items:
+            group.items.append(item)
+
+    return sorted(buckets.values(), key=lambda g: g.sort_key)
 
 
 def infer_themes(files: list[str]) -> list[str]:
@@ -114,7 +171,7 @@ def infer_themes(files: list[str]) -> list[str]:
         (["tg_runner", "run_digest", "merged_digest"], "统一 digest（TG + 微信）"),
         (["channels"], "Telegram 频道管理"),
         (["launchd", "install_launchd"], "晨间 launchd 调度"),
-        (["auto_commit", "generate_commit_message", "hooks.json"], "自动 commit 钩子"),
+        (["auto_commit", "generate_commit_message", "commit_scope"], "自动 commit 钩子"),
         (["build.sh", "install.sh", "install.txt"], "一键打包与安装"),
         (["start.sh"], "start.sh 菜单与 CLI 快捷命令"),
         (["selftest"], "selftest 回归"),
@@ -123,6 +180,7 @@ def infer_themes(files: list[str]) -> list[str]:
         (["preflight", "auth"], "Telegram 登录与预检"),
         (["filter/"], "过滤规则"),
         (["reporting/"], "报告渲染"),
+        (["pre-commit", "git-hooks"], "Git hooks 与提交前检查"),
     ]
     for patterns, label in rules:
         if any(p in joined for p in patterns):
@@ -177,19 +235,15 @@ def format_message() -> str:
     stat = shortstat()
     feature_ids = detect_feature_ids(files)
     themes = infer_themes(files)
-    buckets = categorize(files)
+    groups = categorize(files)
     hints = changelog_hints()
 
     lines = [build_subject(feature_ids, themes), "", stat, "", "变更范围:"]
-    order = ["代码", "PRD", "Tech", "Ops", "文档索引", "文档", "测试", "运维脚本", "入口/规约", "开发工具", "其他"]
-    for key in order:
-        items = buckets.get(key)
-        if not items:
-            continue
-        shown = ", ".join(items)
-        if len(buckets[key]) > len(items):
+    for group in groups:
+        shown = ", ".join(group.items)
+        if group.total_count > len(group.items):
             shown += ", …"
-        lines.append(f"- {key}: {shown}")
+        lines.append(f"- {group.label}: {shown}")
 
     if hints:
         lines.extend(["", "CHANGELOG 摘要:"])

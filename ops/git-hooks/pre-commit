@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Reject commits that include runtime artifacts or secrets (even if force-added).
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+is_blocked_path() {
+  local path="$1"
+  case "$path" in
+    reports|reports/*) return 0 ;;
+    data|data/*) return 0 ;;
+    logs|logs/*) return 0 ;;
+    dist|dist/*) return 0 ;;
+    chat_radar_config.json|tg_radar_config.json) return 0 ;;
+    *.session|*.session-journal) return 0 ;;
+    .env|.env.*) return 0 ;;
+    secrets|secrets/*) return 0 ;;
+  esac
+  return 1
+}
+
+blocked=()
+while IFS= read -r path; do
+  [[ -z "$path" ]] && continue
+  if is_blocked_path "$path"; then
+    blocked+=("$path")
+  fi
+done < <(git diff --cached --name-only)
+
+if [[ ${#blocked[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+echo "pre-commit: 拒绝提交运行时产物或敏感文件：" >&2
+for path in "${blocked[@]}"; do
+  echo "  - $path" >&2
+done
+echo "" >&2
+echo "这些路径已在 .gitignore 中，不应进入版本库。" >&2
+echo "移除 staging: git restore --staged <file>" >&2
+echo "若误用 git add -f，请取消后再提交。" >&2
+exit 1

@@ -40,6 +40,8 @@ echo ">> Python: $($PYTHON --version)"
 
 bash "$ROOT/start.sh" selftest
 
+bash "$ROOT/ops/install_git_hooks.sh"
+
 if [[ ! -f "$ROOT/chat_radar_config.json" ]]; then
   cp "$ROOT/chat_radar_config.example.json" "$ROOT/chat_radar_config.json"
   echo ">> 已生成 chat_radar_config.json"

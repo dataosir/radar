@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "max_items_per_group": 8,
+  "groups": [
+    {
+      "label": "代码",
+      "patterns": ["chat_radar/**"],
+      "priority": 10,
+      "item": "{module}/{basename}"
+    },
+    {
+      "label": "PRD",
+      "patterns": ["docs/prd/**"],
+      "priority": 20
+    },
+    {
+      "label": "Tech",
+      "patterns": ["docs/tech/**"],
+      "priority": 30
+    },
+    {
+      "label": "Ops",
+      "patterns": ["docs/ops/**"],
+      "priority": 40
+    },
+    {
+      "label": "文档索引",
+      "patterns": [
+        "docs/CHANGELOG.md",
+        "docs/project-state.md",
+        "docs/INDEX.md",
+        "docs/README.md"
+      ],
+      "priority": 50
+    },
+    {
+      "label": "文档",
+      "patterns": ["docs/**"],
+      "priority": 60
+    },
+    {
+      "label": "测试",
+      "patterns": ["tests/**", "**/selftest.py", "**/*selftest*"],
+      "priority": 70
+    },
+    {
+      "label": "运维脚本",
+      "patterns": ["ops/**"],
+      "priority": 80
+    },
+    {
+      "label": "入口/规约",
+      "patterns": [
+        "start.sh",
+        "install.sh",
+        "build.sh",
+        "RULES.md",
+        ".cursorrules"
+      ],
+      "priority": 90
+    },
+    {
+      "label": "开发工具",
+      "patterns": [".cursor/**"],
+      "priority": 100
+    }
+  ],
+  "fallback": {
+    "label": "其他",
+    "strategy": "path_prefix",
+    "depth": 2,
+    "priority": 999
+  }
+}

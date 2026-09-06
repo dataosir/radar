@@ -24,6 +24,30 @@ ruff check .                # 配置 ruff 后
 python -m compileall -q chat_radar
 ```
 
+## Git hooks（运行时产物拦截）
+
+`ops/git-hooks/pre-commit` 会在 commit 前检查 staged 文件，**拒绝**提交以下路径（含 `git add -f` 强推）：
+
+| 拦截路径 | 原因 |
+|---|---|
+| `reports/` | digest / 联系人 MD 等运行时产物 |
+| `data/` | JSONL、微信密钥、游标 |
+| `logs/` | 运行日志、交互日志 |
+| `chat_radar_config.json` | 本地配置 |
+| `*.session` | Telegram 会话 |
+| `.env` / `secrets/` | 凭证 |
+
+安装：`./ops/install_git_hooks.sh`（`install.sh` 已自动调用）。
+
+## 自动 commit 消息（Agent 钩子）
+
+- 生成器：`.cursor/hooks/generate_commit_message.py`
+- **变更范围规则**：`.cursor/hooks/commit_scope.json`（可编辑，无需改 Python）
+  - `groups[]`：`patterns`（glob）、`label`、`priority`（越小越靠前）、可选 `item` 模板（如 `{module}/{basename}`）
+  - `fallback`：未匹配文件按 `path_prefix` + `depth` 自动分组
+  - 排序：`priority` → staged 中首次出现顺序 → 标签字母序
+- 新增目录/模块时：在 JSON 加一条 rule，或依赖 fallback 自动归类
+
 ## 代码风格
 
 - **配置走 `config_store`**：`cfg.get("段.键", 默认)`，不硬编码阈值  
