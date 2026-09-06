@@ -12,21 +12,22 @@
 | P0-02 | 配置模板 + .gitignore | ✅ |
 | P0-03 | CLI 骨架 + selftest 占位 | ✅ |
 | MP-00 | 品牌更名 CHAT-RADAR（`chat_radar` 包） | ✅ |
-| MP-02 | F06 微信 export / inbox / digest | ✅ |
+| MP-02 | F06 微信 export / inbox / digest / summary | ✅ |
 | MP-03 | 多平台路线图 `prd/06-multi-platform-roadmap.md` | ✅ |
-| P0-04 | F01 Telethon auth + fetch | ⬜ 下一步 |
+| P0-04 | F01 Telethon auth + fetch | ✅ |
+| P0-03b | 根目录 `start.sh` / `build.sh` | ✅ |
 
 ## Phase 1 · 双源自用 MVP（目标：2 周内可日用）
 
 | ID | 事项 | 依赖 | 状态 |
 |---|---|---|---|
-| P1-01 | F01 频道增量拉取 | P0-04 | ⬜ |
-| P1-02 | F02 关键词过滤 | P1-01 | ⬜ |
-| P1-03 | F03 去重游标 | P1-01 | ⬜ |
-| P1-04 | F04 Markdown digest | P1-02, P1-03 | ⬜ |
-| MP-11 | 统一 digest 合并 TG + 微信 | P1-04, MP-02 | ⬜ |
-| P1-05 | `channels` 子命令 | P1-01 | ⬜ |
-| P1-06 | launchd 晨间调度 | MP-11 | ⬜ |
+| P1-01 | F01 频道增量拉取 | P0-04 | ✅ |
+| P1-02 | F02 关键词过滤 | P1-01 | ✅ |
+| P1-03 | F03 去重游标 | P1-01 | ✅ |
+| P1-04 | F04 Markdown digest | P1-02, P1-03 | ✅ |
+| MP-11 | 统一 digest 合并 TG + 微信 | P1-04, MP-02 | ✅ |
+| P1-05 | `channels` 子命令 | P1-01 | ✅ |
+| P1-06 | launchd 晨间调度 | MP-11 | ✅ |
 | P1-07 | 自用 14 天记录（噪音/漏帖） | MP-11 | ⬜ |
 | MP-13 | QQ 导出解析（复用微信解析器） | MP-02 | 📋 |
 

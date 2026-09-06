@@ -28,6 +28,16 @@ DEFAULTS: dict[str, Any] = {
     "wechat.inbox_dir": "data/wechat_inbox",
     "wechat.default_chat": "inbox",
     "wechat.export_dir": "data/wechat_exports",
+    "wechat.mac_data_dir": "",
+    "wechat.keys_file": "data/wechat_keys.json",
+    "wechat.decrypted_cache_dir": "data/wechat_decrypted",
+    "wechat.watch_chats": [],
+    "wechat.sync_scope": "groups",
+    "wechat.summary_scope": "all",
+    "wechat.summary_output_dir": "reports/wechat_contacts",
+    "wechat.summary_body_max_chars": 500,
+    "wechat.summary_text_only": True,
+    "wechat.self_display_name": "我",
 }
 
 
@@ -56,6 +66,10 @@ class ConfigStore:
                 cur[p] = nxt
             cur = nxt
         cur[parts[-1]] = value
+
+    def set_section(self, key: str, value: Any) -> None:
+        """设置顶层配置段（如 channels 列表）."""
+        self._data[key] = value
 
     def raw(self) -> dict[str, Any]:
         return deepcopy(self._data)

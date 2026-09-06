@@ -61,6 +61,7 @@
 | [`ops/01-credentials-sop.md`](ops/01-credentials-sop.md) | Telegram API 凭证与 session 管理 |
 | [`ops/02-operator-daily-sop.md`](ops/02-operator-daily-sop.md) | 每日扫帖 SOP |
 | [`ops/03-wechat-sop.md`](ops/03-wechat-sop.md) | 微信 ingest 日循环 SOP |
+| [`ops/04-self-use-validation.md`](ops/04-self-use-validation.md) | 14 天自用验证模板（P1-07） |
 
 仓库根 [`../ops/`](../ops/) 放 launchd / cron 可执行脚本（后续）。
 

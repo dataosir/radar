@@ -57,15 +57,61 @@ python -m chat_radar wechat digest
 
 ---
 
-## 4. 日循环（与 Telegram 并行）
+## 3. 路径 C：macOS 本地库同步（免导出，推荐 Mac 用户）
+
+> 微信 4.1+ 数据库加密，需先用外部工具提取密钥。CHAT-RADAR 不内置密钥提取。
+
+### 3.1 一次性准备
+
+```bash
+# 1. 探测微信数据目录（自动写入 wechat.mac_data_dir）
+python -m chat_radar wechat locate
+
+# 2. 安装 wcdb-key-tool（见 https://github.com/TANGandXUE/wcdb-key-tool）
+#    推荐: ./ops/extract_wechat_keys.sh（自动检测活跃账号 + 多账号匹配）
+#    若已捕获 passphrase: sudo .venv/bin/python ops/derive_wechat_keys.py
+
+# 3. 可选：brew install zstd  （解压压缩消息）
+# 4. 配置 wechat.enabled=true
+```
+
+### 3.2 日循环
+
+```bash
+python -m chat_radar wechat sync --since 24
+python -m chat_radar wechat digest --since 24
+```
+
+可选：在配置中设置 `wechat.watch_chats: ["Java招聘群"]` 只同步指定群。
+
+### 3.3 生成联系人摘要（按人维度 MD）
+
+```bash
+# 全量历史 + 群聊与私聊（推荐 Mac 本地库直读）
+python -m chat_radar wechat summary --from-db --since 0 --scope all
+
+# 健康检查
+python -m chat_radar wechat status
+python -m chat_radar wechat keys validate
+```
+
+输出目录：`reports/wechat_contacts/`
+- `index.md` — 联系人索引
+- `张三.md` — 该联系人所有相关消息时间线
+
+`--since 0` 表示不限制时间窗口（全量）。`--person` 可只生成单人。默认 `summary_text_only=true` 仅保留纯文本。
+
+---
+
+## 4. 日循环（与 Telegram 合并）
 
 | 时间 | 动作 |
 |---|---|
-| 晨间 | `wechat inbox`（若有新粘贴） |
-| 周度 | 导出群聊 → `wechat parse` |
-| 随时 | `wechat digest --since 24` |
+| 晨间 | `./start.sh digest` 或 `chat_radar digest`（自动 TG fetch + 微信 inbox + 合并报告） |
+| 周度 | 导出群聊 → `wechat parse`；或 `wechat sync` 增量同步本地库 |
+| 复盘 | `./start.sh` 菜单 8 → 微信联系人摘要；菜单 7 → 微信状态检查 |
 
-Telegram 路径就绪后，两条线可合并为统一 `digest`。
+`wechat.enabled=false` 时 `digest` 仅含 Telegram。
 
 ---
 
@@ -75,6 +121,9 @@ Telegram 路径就绪后，两条线可合并为统一 `digest`。
 
 - `data/wechat_inbox/`
 - `data/wechat_exports/`
+- `data/wechat_keys.json`
+- `data/wechat_decrypted/`
+- `reports/wechat_contacts/`
 - `data/raw_messages.jsonl`（含聊天内容）
 
 ---
@@ -87,6 +136,9 @@ Telegram 路径就绪后，两条线可合并为统一 `digest`。
 | 解析 0 条 | 检查导出格式是否为 `YYYY-MM-DD HH:MM:SS 昵称` |
 | digest 无命中 | 调 `filter.include_keywords` |
 | 重复消息 | 正常 — dedup 会跳过；无需手动删 JSONL |
+| 摘要消息偏少 | 运行 `wechat status`；检查 zstd、纯文本过滤、密钥覆盖率 |
+| 密钥账号不匹配 | `wechat keys validate`；重新 `derive` 或 `extract_wechat_keys.sh` |
+| PBKDF2 0/N 验证 | 多账号时确认活跃账号；用 `derive_wechat_keys.py` 自动匹配 |
 
 ---
 

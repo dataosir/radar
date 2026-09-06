@@ -8,6 +8,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from chat_radar.core.models import RawMessage, stable_hash
+from chat_radar.ingest.wechat_processed import list_pending_files, mark_processed
 
 _FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 
@@ -83,22 +84,25 @@ def scan_inbox_dir(
     default_chat: str = "inbox",
     timezone_name: str = "Asia/Shanghai",
     extensions: tuple[str, ...] = (".txt", ".md"),
+    state_path: Path | None = None,
 ) -> list[RawMessage]:
     if not inbox_dir.exists():
         return []
+    pending = (
+        list_pending_files(inbox_dir, state_path=state_path, extensions=extensions)
+        if state_path is not None
+        else [p for p in sorted(inbox_dir.iterdir()) if p.is_file() and not p.name.startswith(".") and p.suffix.lower() in extensions]
+    )
     messages: list[RawMessage] = []
-    for path in sorted(inbox_dir.iterdir()):
-        if not path.is_file():
-            continue
-        if path.suffix.lower() not in extensions:
-            continue
-        if path.name.startswith("."):
-            continue
-        messages.extend(
-            parse_inbox_file(
-                path,
-                default_chat=default_chat,
-                timezone_name=timezone_name,
-            )
+    for path in pending:
+        parsed = parse_inbox_file(
+            path,
+            default_chat=default_chat,
+            timezone_name=timezone_name,
         )
+        if not parsed:
+            continue
+        messages.extend(parsed)
+        if state_path is not None:
+            mark_processed(state_path, path)
     return messages

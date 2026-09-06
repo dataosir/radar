@@ -10,7 +10,7 @@
 
 | 源 | 适配器 | 状态 |
 |---|---|---|
-| Telegram | `ingest/telethon`（P0-04） | 📋 待实现 |
+| Telegram | `ingest/telethon_client` | ✅ MVP |
 | **微信** | `ingest/wechat_export` + `wechat_inbox` | ✅ MVP |
 | Slack / 企微 | 未来 | 🔮 |
 
@@ -84,7 +84,7 @@ chat_radar_config.json
     ↓
 filter: rules → jobs.jsonl
     ↓
-report: DIGEST_*.md（含 `DIGEST_wechat_*` 分源输出，MP-11 后合并）
+report: DIGEST_*.md（统一 TG + 微信；`wechat digest` 仍可用于单源调试）
 ```
 
 `digest` = `fetch` + `filter` + `report` 串联。

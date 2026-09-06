@@ -12,7 +12,7 @@
 | 产品 | CHAT-RADAR — Telegram / 微信 多源聊天雷达 |
 | 代码版本 | `0.1.0`（`chat_radar.__version__`） |
 | 文档框架 | 一人公司全栈：`prd` / `tech` / `ops` + CHANGELOG + 本文件 |
-| 更新日期 | 2026-09-01 |
+| 更新日期 | 2026-09-06 |
 | 母题 | indie-build-log **Idea 8**（digest）· 招聘垂直自用 |
 
 ---
@@ -30,10 +30,10 @@
 |---|---|---|
 | 语言 | Python 3.10+ | 与 tea 栈一致；Telethon 生态成熟 |
 | Telegram | **Telethon**（User MTProto） | 招聘频道通常不加 Bot |
-| **微信** | **导出 TXT + inbox 落盘** | 不 Hook 个人号；零新依赖 |
+| **微信** | **inbox + export + macOS 本地库** | 不 Hook 个人号；密钥外部提取 |
 | 持久化 | JSON / JSONL 原子写 | 与 tea 一致 |
 | 过滤 MVP | 关键词 + 正则规则 | 零 API 成本 |
-| 调度 | macOS launchd（后续） | 对齐 tea `ops/` 模式 |
+| 调度 | macOS launchd | `ops/install_launchd.sh` |
 
 **依赖变更须先汇报并获批**（见根目录 `RULES.md`）。
 
@@ -41,7 +41,7 @@
 
 ## 当前焦点
 
-**F06 微信 MVP 已实现** — Telegram F01（P0-04）仍为下一步。
+**可分发双源自用 MVP** — 一键 `install.sh` + `start.sh` 菜单闭环；下一步 14 天自用验证。
 
 ## 进行中
 
@@ -49,10 +49,20 @@
 |---|---|---|
 | P0-01 | 文档体系 | prd / tech / ops / RULES / INDEX ✅ |
 | P0-02 | 配置模板 | `chat_radar_config.example.json` ✅ |
-| P0-03 | CLI 骨架 + selftest | ✅ 7/7 |
-| P0-03b | 一键启动 | `ops/start.sh` ✅ |
-| **P0-05** | **F06 微信 ingest** | parse / inbox / digest ✅ |
-| P0-04 | F01 Telegram ingest | Telethon — **下一步** |
+| P0-03 | CLI 骨架 + selftest | ✅ 23/23 |
+| P0-03b | 一键启动 + 引导菜单 | 根目录 `start.sh`（13 项菜单）✅ |
+| P0-03c | 一键打包 | `build.sh` + `install.sh` + bundle ✅ |
+| **P0-04** | **F01 Telegram ingest** | auth / fetch / digest / cursors ✅ |
+| P0-05 | F06 微信 ingest | parse / inbox / import / sync / summary ✅ |
+| **P0-06** | **F06-P2.5 macOS 本地库** | locate / sync ✅（需外部密钥工具） |
+| **P0-07** | **F06-08 联系人 MD 摘要** | `wechat summary` ✅ |
+| **P0-08** | **F06-09 健壮性** | status / keys validate / 读取统计 ✅ |
+| **P0-09** | **MP-11 统一 digest** | inbox + export + sync + TG fetch → 一份报告 ✅ |
+| **P0-10** | **setup 微信引导** | 4/4 步骤 ✅ |
+| **P1-05** | **`channels` 增删启禁** | CLI + 菜单 13 ✅ |
+| **P1-06** | **launchd 晨间调度** | 模板 + install 脚本 ✅ |
+| **P1-07** | **14 天自用验证模板** | `ops/04-self-use-validation.md` ✅ |
+| **P1-08** | **交互节点日志** | `interactions.jsonl` + `start_menu.log` ✅ |
 
 ## 明确不做（现在）
 
@@ -61,12 +71,13 @@
 - 未获批前引入 LLM SDK 或数据库  
 - Bot API 产品化（自用阶段不需要）
 
+可执行脚本在仓库根 [`../../ops/`](../../ops/)（密钥提取、launchd 安装等）。
+
 ## 下一步计划
 
-1. 配置 `api_id` / `api_hash`，实现 `chat_radar auth` 登录。  
-2. 实现 F01：Telegram 增量拉取 → 与微信共用 `raw_messages.jsonl`。  
-3. 合并 `digest`：一条命令输出 TG + 微信命中。  
-4. 自用 2 周：记录噪音/漏帖率。
+1. 解压 bundle → `./install.sh` → 给他人验证安装路径。
+2. 按 [`04-self-use-validation.md`](ops/04-self-use-validation.md) 跑 14 天合并 digest（P1-07）。
+3. 根据噪音/漏帖率决定是否 Phase 2（LLM / stats）。
 
 ---
 
@@ -78,3 +89,4 @@
 | `docs/prd/` | ✅ F01–F06 |
 | `docs/tech/` | ✅ 00–04 |
 | `docs/ops/` | ✅ 01–03 |
+| `ops/` 脚本 | ✅ extract / derive / launchd |

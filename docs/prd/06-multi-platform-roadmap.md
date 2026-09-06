@@ -54,7 +54,7 @@
 
 | 平台 | 接入方式 | 实时性 | 合规风险 | 优先级 | 状态 |
 |---|---|---|---|---|---|
-| **Telegram** | Telethon User API | 增量拉取 | 中（User session） | **P0** | ⬜ P0-04 |
+| **Telegram** | Telethon User API | 增量拉取 | 中（User session） | **P0** | ✅ P0-04 |
 | **微信** | PC 导出 TXT + inbox 落盘 | 手动/半自动 | 低（用户主动导出） | **P1** | ✅ F06 MVP |
 | **QQ** | PC 导出 TXT（格式类似微信） | 手动 | 低 | P2 | 📋 |
 | **Discord** | Bot API / 频道导出 JSON | 准实时 | 低（Bot 需加群） | P2 | 📋 |
@@ -83,7 +83,7 @@
 |---|---|---|---|
 | L1 | **规则过滤** | MVP | 关键词命中 → 进入 digest 列表 |
 | L2 | **截断摘要** | MVP | `summary_max_chars` 截取正文前 N 字 |
-| L3 | **按会话聚合** | P1 | 同一 `chat_title` 合并为线程块 |
+| L3 | **按会话/联系人聚合** | P1 | 同一联系人合并为时间线块（`wechat summary`） |
 | L4 | **LLM 线程摘要** | P2 | OpenAI 兼容 API，每线程 3–5 句摘要 |
 | L5 | **跨源日报** | P2 | 一份 `DIGEST_*.md` 含 TG + 微信 + … 带来源标签 |
 | L6 | **周报 / 趋势** | P3 | 频道质量、高频词、未读积压 |
@@ -106,7 +106,7 @@
 | ID | 事项 | 依赖 |
 |---|---|---|
 | MP-10 | F01 Telegram Telethon ingest | P0-04 |
-| MP-11 | 统一 `digest`：合并 TG + 微信输出 | MP-10 |
+| MP-11 | 统一 `digest`：合并 TG + 微信输出 | MP-10 | ✅ |
 | MP-12 | `status` 展示各源消息量 / 游标 | MP-10 |
 | MP-13 | QQ 导出解析器（复用微信解析逻辑） | MP-02 |
 
@@ -147,7 +147,7 @@
 }
 ```
 
-当前仍用扁平 `wechat` / `telegram` 段；`sources` 总开关在 MP-11 引入。
+当前仍用扁平 `wechat` / `telegram` 段；`digest` 在 `wechat.enabled=true` 时自动合并双源（MP-11 ✅）。
 
 ---
 

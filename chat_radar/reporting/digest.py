@@ -13,6 +13,8 @@ class DigestMeta:
     total_fetched: int
     total_matched: int
     generated_at: datetime
+    source_fetched: dict[str, int] | None = None
+    source_matched: dict[str, int] | None = None
 
 
 def render_digest_markdown(
@@ -27,11 +29,17 @@ def render_digest_markdown(
         f"# {title_prefix} Digest · {ts}",
         "",
         "## 概览",
-        f"- 扫描来源：{meta.scanned_channels}",
+        f"- 扫描会话/频道：{meta.scanned_channels}",
         f"- 新消息：{meta.total_fetched}",
         f"- 命中招聘：{meta.total_matched}",
-        "",
     ]
+    if meta.source_fetched:
+        parts = [f"{name} {count}" for name, count in sorted(meta.source_fetched.items())]
+        lines.append(f"- 消息来源：{' / '.join(parts)}")
+    if meta.source_matched:
+        parts = [f"{name} {count}" for name, count in sorted(meta.source_matched.items())]
+        lines.append(f"- 命中来源：{' / '.join(parts)}")
+    lines.extend(["",])
     if not jobs:
         lines.append("_本次无命中。可检查 `filter.include_keywords` 或来源是否启用。_")
         lines.append("")

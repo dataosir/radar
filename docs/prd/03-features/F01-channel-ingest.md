@@ -30,6 +30,6 @@
 
 ## 验收
 
-- [ ] `chat_radar auth` 成功登录  
-- [ ] `chat_radar fetch` 对 1 个测试频道写入 raw + 更新游标  
-- [ ] 重复 `fetch` 无新增时不写重复行
+- [x] `chat_radar auth` 成功登录  
+- [x] `chat_radar fetch` 对 1 个测试频道写入 raw + 更新游标  
+- [x] 重复 `fetch` 无新增时不写重复行

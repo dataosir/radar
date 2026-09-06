@@ -32,26 +32,50 @@
 ```bash
 cd chat-radar   # 或你的 clone 目录名
 
-# 一键初始化（venv + 依赖 + 配置模板 + selftest）
-./ops/start.sh
+# 一键初始化（venv + 依赖 + 交互菜单 + selftest）
+./start.sh
 
-# 或手动开发模式
-cp chat_radar_config.example.json chat_radar_config.json
-python3 -m chat_radar --help
-python3 -m chat_radar selftest
+# 无参数时进入引导菜单（12 项）：
+#   1) 首次配置（TG + 微信）
+#   4) 生成 digest（TG + 微信全自动 ingest）
+#   7–12) 微信状态 / 摘要 / sync / locate / 密钥 / launchd
+```
+
+也可直接运行子命令：
+
+```bash
+./install.sh                 # 给他人分发：安装 + 可选 setup
+./start.sh setup             # 引导式配置（4/4 含微信）
+./start.sh auth              # 首次登录
+./start.sh fetch             # 增量拉取频道
+./start.sh digest --since 24 # inbox + export + sync + TG fetch + 合并报告
+./start.sh digest --skip-fetch  # 仅用本地数据重新生成报告
+./start.sh status            # 双源状态概览
+./start.sh 8                 # 菜单编号直达（等同 wechat-summary）
+./start.sh wechat-summary    # 微信联系人 Markdown 摘要
+./start.sh help              # 菜单编号与快捷命令对照
+```
+
+### 打包发布（给他人）
+
+```bash
+./build.sh                   # selftest + wheel + bundle（含 ops/ + INSTALL.txt）
+# 解压 dist/chat-radar-*-bundle.tar.gz → ./install.sh
 ```
 
 ### 微信（已可用）
 
 ```bash
-# 解析 PC 导出的聊天记录
-python3 -m chat_radar wechat parse data/wechat_exports/招聘群.txt --chat "Java招聘群"
+# 主路径：合并 TG + 微信 digest
+./start.sh digest --since 24
 
-# 扫描 inbox 落盘文件
-python3 -m chat_radar wechat inbox
-
-# 生成微信 digest
-python3 -m chat_radar wechat digest --since 24
+# 微信专项（菜单 7–11 或 CLI）
+python3 -m chat_radar wechat status
+python3 -m chat_radar wechat import          # 扫描 export 目录新 TXT
+python3 -m chat_radar wechat sync --since 24
+python3 -m chat_radar wechat summary --from-db --since 0 --scope all
+./ops/extract_wechat_keys.sh                 # macOS 一次性密钥
+./ops/install_launchd.sh                     # 晨间自动 digest
 ```
 
 ### Telegram API 凭证
@@ -68,9 +92,12 @@ python3 -m chat_radar wechat digest --since 24
 ```
 chat-radar/
 ├── RULES.md              # AI / 人工实现铁律
+├── install.sh            # 首次安装（分发用）
+├── start.sh              # 一键启动
+├── build.sh              # 一键打包
 ├── chat_radar_config.example.json
 ├── docs/                 # 知识库（prd / tech / ops）
-├── ops/                  # 一键启动 / launchd 脚本
+├── ops/                  # 微信密钥 / launchd 脚本
 ├── chat_radar/           # Python 包
 │   ├── core/             # L0：路径、模型、原子写
 │   ├── config/           # L0：配置
